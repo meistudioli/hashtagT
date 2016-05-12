@@ -55,7 +55,6 @@ var hashtagT = function(id, data) {
 	e = {};
 
 	host.Data = { ClassID:this.id };
-	host.value = this.Data.values;//data bind
 	if (!host.id) host.id = 'hashtagT-' + this.id + getRand(1, 10000);
 	buffer = this.template.cloneNode(true);
 	if (this.wc.ShadowDOM) {
@@ -383,7 +382,21 @@ hashtagT.prototype = {
 				}
 			);
 		} else {
-			prototype = Object.create(HTMLElement.prototype);
+			prototype = Object.create(HTMLElement.prototype, {
+				value: {
+					configurable: false,
+					get: function() {
+						var ins = getIns(this, 'hashtagT');
+						return ins.Data.values;
+					},
+					set: function(value) {
+						var ins;
+						if (!Array.isArray(value)) return;
+						ins = getIns(this, 'hashtagT');
+						ins.refresh(value.map(function(v){return '#' + v;}).join(' '));
+					}
+				}
+			});
 			prototype.attachedCallback = hashtagT.prototype.attachedCallback;
 			prototype.detachedCallback = function() {
 				if (typeof this.id == 'undefined') return;
@@ -735,6 +748,7 @@ hashtagT.prototype = {
 		var unit, isInputEvt, res;
 
 		isInputEvt = (typeof isInputEvt == 'boolean') ? isInputEvt : false;
+		htag = this.format(htag);
 		res = this.validate(htag);
 		if (!res.pass) {
 			if (isInputEvt && !this.Ens.inputs.classList.contains('warn-act')) {
@@ -881,7 +895,7 @@ hashtagT.prototype = {
 				vanquish.appendChild(input);
 			}
 		);
-		this.Ens.host.value = this.Data.values.slice();
+		if (!this.wc.CustomElements) this.Ens.host.value = this.Data.values.slice();
 	},
 	i13n: function(action, label) {
 		var data;
