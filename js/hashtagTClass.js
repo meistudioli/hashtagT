@@ -710,7 +710,9 @@ hashtagT.prototype = {
 	validate: function(htag) {
 		var msg, pass;
 
-		if (this.Data.values.indexOf(htag) != -1) {
+		if (!htag.length) {
+			msg = 'empty';
+		} else if (this.Data.values.indexOf(htag) != -1) {
 			msg = 'deplicate';
 		} else if (this.Data.values.length+1 > this.Data.maxAmount) {
 			msg = 'exceed maximum amount';
@@ -889,7 +891,7 @@ hashtagT.prototype = {
 		data = {
 			action: action
 		};
-		if (label) data.label = label;
+		data.label = label || 'none';
 		gaExt.doEventBeacon(this.Ens.host, data);
 	},
 	set: function(input) {
