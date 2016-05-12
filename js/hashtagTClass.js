@@ -710,6 +710,7 @@ hashtagT.prototype = {
 	validate: function(htag) {
 		var msg, pass;
 
+		htag = this.format(htag);
 		if (!htag.length) {
 			msg = 'empty';
 		} else if (this.Data.values.indexOf(htag) != -1) {
@@ -733,9 +734,7 @@ hashtagT.prototype = {
 	add: function(htag, isInputEvt) {
 		var unit, isInputEvt, res;
 
-		htag = this.format(htag);
 		isInputEvt = (typeof isInputEvt == 'boolean') ? isInputEvt : false;
-
 		res = this.validate(htag);
 		if (!res.pass) {
 			if (isInputEvt && !this.Ens.inputs.classList.contains('warn-act')) {
