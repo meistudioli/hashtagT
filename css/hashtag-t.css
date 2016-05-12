@@ -1,0 +1,6 @@
+main{padding-top:0;}
+section{width:60%;margin-top:10vmin;}
+section form{width:96%;background-color:#fff;display:block;padding:2%;border-radius:.5vmin;}
+
+.mobile section{width:90%;margin-top:4vmin;}
+.mobile section hash-tag-t{font-size:4.5vmin;line-height:2;}

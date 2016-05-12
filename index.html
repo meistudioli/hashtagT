@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" x-frame-options="sameorigin">
+<head>
+<meta http-equiv="Content-Security-Policy1" content="default-src 'self'; font-src * data:; style-src 'self' 'unsafe-inline';">
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+<meta http-equiv="PRAGMA" content="NO-CACHE">
+<meta http-equiv="Expires" content="Wed, 26 Feb 1997 08:21:57 GMT">
+<meta http-equiv="x-frame-options" content="sameorigin">
+<meta http-equiv="imagetoolbar" content="no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="description" content="#tag 已經被廣泛的應用在我們的生活周遭, 主要作用便是方便我們做 grouping, 很多 social based 的服務皆已大量採納這樣的實作, 比方說 facebook, instagram 以及 tumblr 皆有支援, 雖然說核心思想一致, 不過實際上各家的實作還是存在著很大的差異, 前一陣子筆者仿照 facebook 開發了一個相關的 web components - <hash-tag>, 為了讓 PM 能有更多的選擇, 筆者又開發了一款 web components - <hash-tag-t>, 這款是依照自家的服務 tumblr 所開發, 雖然說少了 facebook 自由奔放的感覺, 不過多了便利的 autocomplete 以及 i13n tracking, 更方便我們做一些約制以及成效追蹤喔! 接下來就讓我來介紹 <hash-tag-t> 給大家認識">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@mei">
+<meta name="twitter:creator" content="@mei">
+<meta name="twitter:title" content="hashtag(tumblr version)">
+<meta name="twitter:description" content="#tag 已經被廣泛的應用在我們的生活周遭, 主要作用便是方便我們做 grouping, 很多 social based 的服務皆已大量採納這樣的實作, 比方說 facebook, instagram 以及 tumblr 皆有支援, 雖然說核心思想一致, 不過實際上各家的實作還是存在著很大的差異, 前一陣子筆者仿照 facebook 開發了一個相關的 web components - <hash-tag>, 為了讓 PM 能有更多的選擇, 筆者又開發了一款 web components - <hash-tag-t>, 這款是依照自家的服務 tumblr 所開發, 雖然說少了 facebook 自由奔放的感覺, 不過多了便利的 autocomplete 以及 i13n tracking, 更方便我們做一些約制以及成效追蹤喔! 接下來就讓我來介紹 <hash-tag-t> 給大家認識">
+<meta name="twitter:image:src" content="http://mei.homin.com.tw/img/preview/hashtagT.png">
+<meta property="og:title" content="hashtag(tumblr version)">
+<meta property="og:site_name" content="mei">
+<meta property="og:description" content="#tag 已經被廣泛的應用在我們的生活周遭, 主要作用便是方便我們做 grouping, 很多 social based 的服務皆已大量採納這樣的實作, 比方說 facebook, instagram 以及 tumblr 皆有支援, 雖然說核心思想一致, 不過實際上各家的實作還是存在著很大的差異, 前一陣子筆者仿照 facebook 開發了一個相關的 web components - <hash-tag>, 為了讓 PM 能有更多的選擇, 筆者又開發了一款 web components - <hash-tag-t>, 這款是依照自家的服務 tumblr 所開發, 雖然說少了 facebook 自由奔放的感覺, 不過多了便利的 autocomplete 以及 i13n tracking, 更方便我們做一些約制以及成效追蹤喔! 接下來就讓我來介紹 <hash-tag-t> 給大家認識">
+<meta property="og:image" content="http://mei.homin.com.tw/img/preview/hashtagT.png">
+<title>hashtag(tumblr version) - web components based input field</title>
+<link rel="dns-prefetch" href="//mei.homin.com.tw">
+<link rel="canonical" href="http://mei.homin.com.tw/hashtagTPrototype.html">
+<link rel="stylesheet" href="css/cssbase.css">
+<link rel="stylesheet" href="css/adornFormElements.css">
+<link rel="stylesheet" href="css/hashtag-t.css">
+<script src="js/pageRender.js" data-source="js/pack-hashtag-t.js&js/gaExt.js&js/hashtagTInit.js"></script>
+</head>
+
+<body>
+<header id="hd" role="banner">
+	<h1>hashtag(tumblr version) - web components based input field</h1>
+</header>
+
+<main id="bd" role="main">
+	<section>
+		<form>
+			<label>
+				<hash-tag-t hidden data-conf='{&quot;io&quot;:{&quot;uri&quot;:&quot;hashtagTFunc.php&quot;,&quot;params&quot;:{&quot;qAmt&quot;:&quot;5&quot;,&quot;action&quot;:&quot;htagSuggest&quot;,&quot;property&quot;:&quot;meistudio&quot;}},&quot;pattern&quot;:[&quot;^[\\u4e00-\\u9fa5a-zA-Z0-9]{1,20}$&quot;,&quot;^(\\d+[\\u4e00-\\u9fa5a-zA-Z]+)|([\\u4e00-\\u9fa5a-zA-Z]+\\d*)&quot;],&quot;maxAmount&quot;:&quot;20&quot;,&quot;duration&quot;:&quot;180s&quot;,&quot;withCredentials&quot;:true}'>
+					<h3>hash-tag-t</h3>
+					<input name="hashtag" value="#mei #lauMu" placeholder="#tag">
+				</hash-tag-t>
+			</label>
+		</form>
+	</section>
+</main>
+
+<footer id="ft">
+	<small role="contentinfo">Powered by mei's studio.</small>
+	<var id="gaConf" data-conf='{&quot;trackingID&quot;:&quot;UA-74300583-1&quot;,&quot;sampleRate&quot;:&quot;100&quot;,&quot;markId&quot;:&quot;gaExtMark&quot;,&quot;signEsc&quot;:&quot;ga-esc&quot;,&quot;customDefinitions&quot;:{&quot;document_group&quot;:&quot;hashtag(tumblr) prototype&quot;},&quot;cdMap&quot;:{&quot;document_group&quot;:&quot;contentGroup1&quot;},&quot;trackedMods&quot;:{&quot;form&quot;:&quot;hashtagTForm&quot;}}' hidden>ga conf</var>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "CreativeWork",
+  "name": "hashtag(tumblr version)",
+  "url": "http://mei.homin.com.tw/hashtagTPrototype.html",
+  "description": "#tag 已經被廣泛的應用在我們的生活周遭, 主要作用便是方便我們做 grouping, 很多 social based 的服務皆已大量採納這樣的實作, 比方說 facebook, instagram 以及 tumblr 皆有支援, 雖然說核心思想一致, 不過實際上各家的實作還是存在著很大的差異, 前一陣子筆者仿照 facebook 開發了一個相關的 web components - <hash-tag>, 為了讓 PM 能有更多的選擇, 筆者又開發了一款 web components - <hash-tag-t>, 這款是依照自家的服務 tumblr 所開發, 雖然說少了 facebook 自由奔放的感覺, 不過多了便利的 autocomplete 以及 i13n tracking, 更方便我們做一些約制以及成效追蹤喔! 接下來就讓我來介紹 <hash-tag-t> 給大家認識",
+  "image": "http://mei.homin.com.tw/img/preview/hashtagT.png",
+  "author": {
+	  "@type": "Person",
+	  "name": "Paul Li",
+	  "jobTitle": "Front End engineer",
+	  "affiliation": "mei's studio",
+	  "additionalName": "mei",
+	  "url": "https://www.facebook.com/mei.studio.li",
+	  "image": "https://graph.facebook.com/mei.studio.li/picture",
+	  "brand": "mei's studio",
+	  "familyName": "Li",
+	  "gender": "M",
+	  "givenName": "Paul",
+	  "owns": "mei's studio",
+	  "worksFor": "Yahoo",
+	  "description": "People who loves all front end skills"
+  },
+  "dateCreated": "2016-05-06",
+  "datePublished": "2016-05-06",
+  "genre": "web components",
+  "keywords": "hashtagT,webcomponents"
+}
+</script>
+</body>
+</html>
