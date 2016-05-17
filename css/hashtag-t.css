@@ -1,6 +1,9 @@
 main{padding-top:0;}
 section{width:60%;margin-top:10vmin;}
 section form{width:96%;background-color:#fff;display:block;padding:2%;border-radius:.5vmin;}
+.warn{font-size:2vmin;color:#f05763;font-family:arial,helvetica,clean,sans-serif,Microsoft JhengHei,\5FAE\8EDF\6B63\9ED1\9AD4;line-height:1.8;background:url('ico_error.svg') no-repeat;background-size:2.4vmin;background-position:left center;padding-left:3.4vmin;margin-top:1vmin;transition:transform 300ms cubic-bezier(.17,.67,.5,1.7),opacity 300ms cubic-bezier(.17,.67,.5,1.7);-webkit-transition:-webkit-transform 300ms cubic-bezier(.17,.67,.5,1.7),opacity 300ms cubic-bezier(.17,.67,.5,1.7);transform:translateY(30%);-webkit-transform:translateY(30%);opacity:0;}
+.warn.act{transform:translateY(0);-webkit-transform:translateY(0);opacity:1;}
 
 .mobile section{width:90%;margin-top:4vmin;}
 .mobile section hash-tag-t{font-size:4.5vmin;line-height:2;}
+.mobile .warn{font-size:4.5vmin;background-size:6vmin;line-height:2;padding-left:7.5vmin;}

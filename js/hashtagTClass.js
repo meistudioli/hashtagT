@@ -100,20 +100,16 @@ var hashtagT = function(id, data) {
 	this.Ens.wrap.addEventListener('click', this.eActG, false);
 	
 	// method bundle
-	if (typeof this.Ens.host.set != 'function') this.Ens.host.set = hashtagT.prototype.set;
-	if (typeof this.Ens.host.get != 'function') this.Ens.host.get = hashtagT.prototype.get;
-	if (typeof this.Ens.host.addTag != 'function') this.Ens.host.addTag = hashtagT.prototype.addG;
-	if (typeof this.Ens.host.removeTag != 'function') this.Ens.host.removeTag = hashtagT.prototype.removeG;
-	if (typeof this.Ens.host.addCallback != 'function') this.Ens.host.addCallback = hashtagT.prototype.addCallback;
-	if (typeof this.Ens.host.removeCallback != 'function') this.Ens.host.removeCallback = hashtagT.prototype.removeCallback;
-	this.Ens.host.focus = hashtagT.prototype.focus;
+	if (!this.wc.CustomElements) {
+		Object.defineProperties(this.Ens.host, hashtagT.prototype.properties);
 
-	//attrChange
-	if (this.observer) {
-		e.config = {
-			attributes: true
-		};
-		this.observer.observe(host, e.config);
+		//attrChange
+		if (this.observer) {
+			e.config = {
+				attributes: true
+			};
+			this.observer.observe(host, e.config);
+		}//end if		
 	}//end if
 
 	//clear
@@ -127,7 +123,8 @@ var hashtagT = function(id, data) {
 			e.set(e.Data.fieldValue);
 		}
 	, 100);
-	if (host.hasAttribute('disabled')) host.setAttribute('disabled', true);
+	if (host.hasAttribute('disabled')) host.setAttribute('disabled', 'disabled');
+	if (host.hasAttribute('readonly')) host.setAttribute('readonly', 'readonly');
 
 	//remove hidden
 	host.removeAttribute('hidden');
@@ -149,6 +146,7 @@ hashtagT.prototype = {
 			hashtagT.prototype.userModify = '';
 			hashtagT.prototype.localStorage = isAPISupport('localStorage');
 			hashtagT.prototype.observer = '';
+			hashtagT.prototype.properties = {};
 
 			//remove expire localStorage
 			if (this.localStorage) {
@@ -218,67 +216,47 @@ hashtagT.prototype = {
 			if (e.appearance) e.appearance += 'border-radius:0;';
 
 			//css
+			e.scope = (this.wc.ShadowDOM) ? '' : 'hash-tag-t ';
 			createCSSClass('hash-tag-t', 'font-size:2vmin;line-height:1.8;display:block;padding:0;margin:0;font-family:arial,helvetica,clean,sans-serif,Microsoft JhengHei,\\5FAE\\8EDF\\6B63\\9ED1\\9AD4;');
 			createCSSClass('hash-tag-t h3', 'display:none;');
 			createCSSClass('hash-tag-t .vanquish', 'width:100%;height:0;visibility:hidden;overflow:hidden;');
+
+			css.push({k:e.scope+'.htag-wrap', v:'display:flex;flex-flow:row wrap;'});
+			css.push({k:e.scope+'.htag-unit', v:'font-size:inherit;color:rgba(0,0,0,.3);height:100%;border-radius:2px;padding:0 6px;cursor:pointer;line-height:inherit;display:block;'+e.aniUnit});
+			css.push({k:e.scope+'.htag-unit:before', v:'content:"#";'});
+			css.push({k:e.scope+'.htag-unit:hover', v:'color:#529ecc;background-color:#e0eef6;'});
+			css.push({k:e.scope+'.htag-unit:focus', v:'color:#529ecc;background-color:#e0eef6;outline:0 none;'});
+			css.push({k:e.scope+'.inputs:empty:before', v:'color:rgba(0,0,0,.3);content:attr(placeholder);display:block;'});
+			css.push({k:e.scope+'.input-set', v:'position:relative;padding:0 14px;margin-left:-14px;'});
+			css.push({k:e.scope+'.inputs', v:'position:relative;display:block;cursor:text;z-index:2;'+e.userModify+e.appearance});
+			css.push({k:e.scope+'.htag-unit+.input-set', v:'margin-left:0;'});
+			css.push({k:e.scope+'.htag-suggest', v:'position:absolute;left:0;top:100%;width:auto;background:#fff;display:block;border-radius:4px;border:1px solid #dcdcdc;z-index:1;box-shadow:3px 3px 0px rgba(0,0,0,.2);margin-top:1vmin;white-space:nowrap;'+e.aniSuggest});
+			css.push({k:e.scope+'.htag-suggest.hide', v:e.aniSuggestHide});
+			css.push({k:e.scope+'.htag-suggest li', v:'color:#666;line-height:2.5;padding:0 14px;cursor:pointer;'});
+			css.push({k:e.scope+'.htag-suggest li p', v:'border-top:1px solid #f3f3f4;'});
+			css.push({k:e.scope+'.htag-suggest li:hover', v:'color:#999;background-color:rgba(243,243,244,.6);'});
+			css.push({k:e.scope+'.htag-suggest .on', v:'color:#999;background-color:rgba(243,243,244,.6);'});
+			css.push({k:e.scope+'.htag-suggest li:first-child p', v:'border-top:0 none;'});
+			css.push({k:e.scope+'.htag-suggest li:last-child', v:'border-bottom:4px solid #f05763;'});
+			css.push({k:e.scope+'.htag-suggest:before', v:'position:absolute;content:"";left:8px;top:-16px;border:8px solid transparent;border-bottom-color:#dcdcdc;'});
+			css.push({k:e.scope+'.htag-suggest:after', v:'position:absolute;content:"";left:8px;top:-15px;border:8px solid transparent;border-bottom-color:#fff;'});
+			css.push({k:e.scope+'.inputs:focus', v:'outline:0 none;'});
+			css.push({k:e.scope+'.inputs:focus~.htag-suggest:not(.hide)', v:'display:block;'});
+			if (typeof anis != 'undefined') {
+				css.push({k:e.scope+'.warn-act', v:anis.animation + ':h-shake 200ms 3 both,h-word 500ms;'});
+				css.push({k:e.scope+'.htag-unit.on', v:e.aniUnitOn});
+			}//end if
+
 			if (this.wc.ShadowDOM) {
 				css.push({k:'h3', v:'display:none;'});
-				css.push({k:'.htag-wrap', v:'display:flex;flex-flow:row wrap;'});
-				css.push({k:'.htag-unit', v:'font-size:inherit;color:rgba(0,0,0,.3);height:100%;border-radius:2px;padding:0 6px;cursor:pointer;line-height:inherit;display:block;'+e.aniUnit});
-				css.push({k:'.htag-unit:before', v:'content:"#";'});
-				css.push({k:'.htag-unit:hover', v:'color:#529ecc;background-color:#e0eef6;'});
-				css.push({k:'.htag-unit:focus', v:'color:#529ecc;background-color:#e0eef6;outline:0 none;'});
-				css.push({k:'.inputs:empty:before', v:'color:rgba(0,0,0,.3);content:attr(placeholder);display:block;'});
-				css.push({k:'.input-set', v:'position:relative;padding:0 14px;margin-left:-14px;'});
-				css.push({k:'.inputs', v:'position:relative;display:block;cursor:text;z-index:2;'+e.userModify+e.appearance});
 				if (e.userModifyDisable) {
 					css.push({k:':host([disabled]) .inputs', v:e.userModifyDisable});
-				}//end if
-				css.push({k:'.htag-unit+.input-set', v:'margin-left:0;'});
-				css.push({k:'.htag-suggest', v:'position:absolute;left:0;top:100%;width:auto;background:#fff;display:block;border-radius:4px;border:1px solid #dcdcdc;z-index:1;box-shadow:3px 3px 0px rgba(0,0,0,.2);margin-top:1vmin;white-space:nowrap;'+e.aniSuggest});
-				css.push({k:'.htag-suggest.hide', v:e.aniSuggestHide});
-				css.push({k:'.htag-suggest li', v:'color:#666;line-height:2.5;padding:0 14px;cursor:pointer;'});
-				css.push({k:'.htag-suggest li p', v:'border-top:1px solid #f3f3f4;'});
-				css.push({k:'.htag-suggest li:hover', v:'color:#999;background-color:rgba(243,243,244,.6);'});
-				css.push({k:'.htag-suggest .on', v:'color:#999;background-color:rgba(243,243,244,.6);'});
-				css.push({k:'.htag-suggest li:first-child p', v:'border-top:0 none;'});
-				css.push({k:'.htag-suggest li:last-child', v:'border-bottom:4px solid #f05763;'});
-				css.push({k:'.htag-suggest:before', v:'position:absolute;content:"";left:8px;top:-16px;border:8px solid transparent;border-bottom-color:#dcdcdc;'});
-				css.push({k:'.htag-suggest:after', v:'position:absolute;content:"";left:8px;top:-15px;border:8px solid transparent;border-bottom-color:#fff;'});
-				css.push({k:'.inputs:focus', v:'outline:0 none;'});
-				css.push({k:'.inputs:focus~.htag-suggest:not(.hide)', v:'display:block;'});
-				if (typeof anis != 'undefined') {
-					css.push({k:'.warn-act', v:anis.animation + ':h-shake 200ms 3 both,h-word 500ms;'});
-					css.push({k:'.htag-unit.on', v:e.aniUnitOn});
+					css.push({k:':host([readonly]) .inputs', v:e.userModifyDisable});
 				}//end if
 			} else {
-				css.push({k:'hash-tag-t .htag-wrap', v:'display:flex;flex-flow:row wrap;'});
-				css.push({k:'hash-tag-t .htag-unit', v:'font-size:inherit;color:rgba(0,0,0,.3);height:100%;border-radius:2px;padding:0 6px;cursor:pointer;line-height:inherit;display:block;'+e.aniUnit});
-				css.push({k:'hash-tag-t .htag-unit:before', v:'content:"#";'});
-				css.push({k:'hash-tag-t .htag-unit:hover', v:'color:#529ecc;background-color:#e0eef6;'});
-				css.push({k:'hash-tag-t .htag-unit:focus', v:'color:#529ecc;background-color:#e0eef6;outline:0 none;'});
-				css.push({k:'hash-tag-t .inputs:empty:before', v:'color:rgba(0,0,0,.3);content:attr(placeholder);display:block;'});
-				css.push({k:'hash-tag-t .input-set', v:'position:relative;padding:0 14px;margin-left:-14px;'});
-				css.push({k:'hash-tag-t .inputs', v:'position:relative;display:block;cursor:text;z-index:2;'+e.userModify+e.appearance});
 				if (e.userModifyDisable) {
 					css.push({k:'hash-tag-t[disabled] .inputs', v:e.userModifyDisable});
-				}//end if
-				css.push({k:'hash-tag-t .htag-unit+.input-set', v:'margin-left:0;'});
-				css.push({k:'hash-tag-t .htag-suggest', v:'position:absolute;left:0;top:100%;width:auto;background:#fff;display:block;border-radius:4px;border:1px solid #dcdcdc;z-index:1;box-shadow:3px 3px 0px rgba(0,0,0,.2);margin-top:1vmin;white-space:nowrap;'+e.aniSuggest});
-				css.push({k:'hash-tag-t .htag-suggest.hide', v:e.aniSuggestHide});
-				css.push({k:'hash-tag-t .htag-suggest li', v:'color:#666;line-height:2.5;padding:0 14px;cursor:pointer;'});
-				css.push({k:'hash-tag-t .htag-suggest li p', v:'border-top:1px solid #f3f3f4;'});
-				css.push({k:'hash-tag-t .htag-suggest li:hover', v:'color:#999;background-color:rgba(243,243,244,.6);'});
-				css.push({k:'hash-tag-t .htag-suggest .on', v:'color:#999;background-color:rgba(243,243,244,.6);'});
-				css.push({k:'hash-tag-t .htag-suggest li:first-child p', v:'border-top:0 none;'});
-				css.push({k:'hash-tag-t .htag-suggest li:last-child', v:'border-bottom:4px solid #f05763;'});
-				css.push({k:'hash-tag-t .htag-suggest:before', v:'position:absolute;content:"";left:8px;top:-16px;border:8px solid transparent;border-bottom-color:#dcdcdc;'});
-				css.push({k:'hash-tag-t .htag-suggest:after', v:'position:absolute;content:"";left:8px;top:-15px;border:8px solid transparent;border-bottom-color:#fff;'});
-				css.push({k:'hash-tag-t .inputs:focus', v:'outline:0 none;'});
-				css.push({k:'hash-tag-t .inputs:focus~.htag-suggest:not(.hide)', v:'display:block;'});
-				if (typeof anis != 'undefined') {
-					css.push({k:'hash-tag-t .warn-act', v:anis.animation + ':h-shake 200ms 3 both,h-word 500ms;'});
-					css.push({k:'hash-tag-t .htag-unit.on', v:e.aniUnitOn});
+					css.push({k:'hash-tag-t[readonly] .inputs', v:e.userModifyDisable});
 				}//end if
 			}//end if
 
@@ -319,6 +297,69 @@ hashtagT.prototype = {
 					}
 				);
 			}//end if
+
+			//properties
+			hashtagT.prototype.properties = {
+				value: {
+					configurable: false,
+					get: function() {
+						var ins = getIns(this, 'hashtagT');
+						return ins.Data.values;
+					},
+					set: function(value) {
+						var ins;
+						if (!Array.isArray(value)) return;
+						ins = getIns(this, 'hashtagT');
+						ins.refresh(value.map(function(v){return '#' + v;}).join(' '));
+					}
+				},
+				disabled: {
+					configurable: false,
+					get: function() {
+						return this.hasAttribute('disabled');
+					},
+					set: function(flag) {
+						var ins;
+						ins = getIns(this, 'hashtagT');
+						if (flag) {
+							if (!this.hasAttribute('disabled')) this.setAttribute('disabled', 'disabled');
+							if (ins.observer) ins.Ens.inputs.removeAttribute('contenteditable');
+						} else {
+							if (this.hasAttribute('disabled')) this.removeAttribute('disabled');
+							if (ins.observer) ins.Ens.inputs.setAttribute('contenteditable', true);
+						}//end if
+						ins.genData();
+					}
+				},
+				set: {
+					configurable: false,
+					value: hashtagT.prototype.set
+				},
+				get: {
+					configurable: false,
+					value: hashtagT.prototype.get
+				},
+				addTag: {
+					configurable: false,
+					value: hashtagT.prototype.addG
+				},
+				removeTag: {
+					configurable: false,
+					value: hashtagT.prototype.removeG
+				},
+				addCallback: {
+					configurable: false,
+					value: hashtagT.prototype.addCallback
+				},
+				removeCallback: {
+					configurable: false,
+					value: hashtagT.prototype.removeCallback
+				},
+				focus: {
+					configurable: false,
+					value: hashtagT.prototype.focus
+				}
+			};
 
 			//excute css
 			if (this.wc.ShadowDOM) {
@@ -382,33 +423,13 @@ hashtagT.prototype = {
 				}
 			);
 		} else {
-			prototype = Object.create(HTMLElement.prototype, {
-				value: {
-					configurable: false,
-					get: function() {
-						var ins = getIns(this, 'hashtagT');
-						return ins.Data.values;
-					},
-					set: function(value) {
-						var ins;
-						if (!Array.isArray(value)) return;
-						ins = getIns(this, 'hashtagT');
-						ins.refresh(value.map(function(v){return '#' + v;}).join(' '));
-					}
-				}
-			});
+			prototype = Object.create(HTMLElement.prototype, hashtagT.prototype.properties);
 			prototype.attachedCallback = hashtagT.prototype.attachedCallback;
 			prototype.detachedCallback = function() {
 				if (typeof this.id == 'undefined') return;
 				OhashtagT['hashtagT'+this.mid].terminate();
 			};
 			prototype.attributeChangedCallback = hashtagT.prototype.attrChange;
-			prototype.set = hashtagT.prototype.set;
-			prototype.get = hashtagT.prototype.get;
-			prototype.addTag = hashtagT.prototype.addG;
-			prototype.removeTag = hashtagT.prototype.removeG;
-			prototype.addCallback = hashtagT.prototype.addCallback;
-			prototype.removeCallback = hashtagT.prototype.removeCallback;
 			document[ce]('hash-tag-t', {prototype: prototype});
 		}//end if
 	},
@@ -455,7 +476,7 @@ hashtagT.prototype = {
 	attrChange: function(attrName, oldVal, newVal, target) {
 		var ins;
 
-		if (['data-set', 'disabled'].indexOf(attrName) == -1) return;
+		if (['data-set', 'disabled', 'readonly'].indexOf(attrName) == -1) return;
 		ins = getIns(target || this, 'hashtagT');
 		if (!ins) return;
 		switch (attrName) {
@@ -463,12 +484,20 @@ hashtagT.prototype = {
 				ins.set(newVal);
 				break;
 			case 'disabled':
-				if (!ins.observer) return;
 				if (newVal) {
 					//disabled
-					ins.Ens.inputs.removeAttribute('contenteditable');
+					if (ins.observer) ins.Ens.inputs.removeAttribute('contenteditable');
 				} else {
-					ins.Ens.inputs.setAttribute('contenteditable', true);
+					if (ins.observer) ins.Ens.inputs.setAttribute('contenteditable', true);
+				}//end if
+				ins.genData();
+				break;
+			case 'readonly':
+				if (newVal) {
+					//readonly
+					if (ins.observer) ins.Ens.inputs.removeAttribute('contenteditable');
+				} else {
+					if (ins.observer) ins.Ens.inputs.setAttribute('contenteditable', true);
 				}//end if
 				break;
 		}//end switch
@@ -522,8 +551,13 @@ hashtagT.prototype = {
 					stopEvents(e);
 					ae = ae.innerHTML.trim();
 					if (!ae.length) return;
-					this.Ens.suggest.classList.add('hide');
-					this.add(ae, true);
+					if (this.Ens.funcPredict) {
+						//suggest click
+						this.Ens.funcPredict.click();
+					} else {
+						this.Ens.suggest.classList.add('hide');
+						this.add(ae, true);
+					}//end if
 					break;
 				default:
 					//↑, ↓
@@ -584,6 +618,7 @@ hashtagT.prototype = {
 		} else {
 			empty(this.Ens.suggest);
 			this.Data.default = key;
+			this.Ens.funcPredict = null;
 			this.Ens.predicts = [];
 			data = this.Data.pool[key];
 
@@ -616,6 +651,12 @@ hashtagT.prototype = {
 	},
 	remove: function(htag) {
 		var unit, htags;
+
+		if (this.Ens.host.hasAttribute('disabled') || this.Ens.host.hasAttribute('readonly')) {
+			this.executeCallBack('error', 'disabled or readonly mode');
+			return;
+		}//end if
+
 		htags = [].slice.call(this.Ens.wrap.querySelectorAll('.htag-unit'));
 		if (typeof htag == 'string') {
 			unit = htags.find(function(e) {
@@ -628,7 +669,10 @@ hashtagT.prototype = {
 			htag = unit;
 		}//end if
 		unit = htag.textContent.trim();
-		if (htags.indexOf(htag) == -1 || this.Data.values.indexOf(unit) == -1) return;
+		if (htags.indexOf(htag) == -1 || this.Data.values.indexOf(unit) == -1) {
+			this.executeCallBack('error', 'htag missing');
+			return;
+		}//end if
 
 		htag.blur();
 		(typeof this.anis != 'undefined') ? htag.classList.remove('on') : htag.parentNode.removeChild(htag);
@@ -724,10 +768,12 @@ hashtagT.prototype = {
 		var msg, pass;
 
 		htag = this.format(htag);
-		if (!htag.length) {
+		if (this.Ens.host.hasAttribute('disabled') || this.Ens.host.hasAttribute('readonly')) {
+			msg = 'disabled or readonly mode';
+		} else if (!htag.length) {
 			msg = 'empty';
 		} else if (this.Data.values.indexOf(htag) != -1) {
-			msg = 'deplicate';
+			msg = 'duplicate';
 		} else if (this.Data.values.length+1 > this.Data.maxAmount) {
 			msg = 'exceed maximum amount';
 		} else if (!this.Data.pattern.every(function(pattern){ return pattern.test(htag); })) {
@@ -771,6 +817,7 @@ hashtagT.prototype = {
 
 		//clean inputs
 		if (isInputEvt) empty(this.Ens.inputs);
+		this.resetPredict();
 
 		this.i13n('addTag', htag);
 		this.executeCallBack('addTag', htag);
@@ -885,6 +932,7 @@ hashtagT.prototype = {
 		name = this.Data.fieldName + '[]';
 		empty(vanquish);
 
+		if (this.Ens.host.hasAttribute('disabled')) return;
 		this.Data.values.forEach(
 			function(value) {
 				var input;
@@ -895,7 +943,6 @@ hashtagT.prototype = {
 				vanquish.appendChild(input);
 			}
 		);
-		if (!this.wc.CustomElements) this.Ens.host.value = this.Data.values.slice();
 	},
 	i13n: function(action, label) {
 		var data;

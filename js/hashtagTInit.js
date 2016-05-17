@@ -38,8 +38,29 @@ function isEventSupported(eventName, element) {
 }
 
 var init = {
+	iid: '',
+	warn: '',
+	coolTime: 5000,
+	display: function(msg) {
+		var e;
+		clearTimeout(this.iid);
+		this.warn.textContent = msg;
+		this.warn.classList.add('act');
+		e = this.warn;
+		this.iid = setTimeout(
+			function() {
+				e.classList.remove('act');
+			}
+		, this.coolTime);
+	},
 	callBackA: function(action, label) {
 		console.log('callBackA', arguments);
+		if (action != 'error') {
+			clearTimeout(init.iid);
+			init.warn.classList.remove('act');
+		} else {
+			init.display(label);
+		}//end if
 	},
 	callBackB: function(action, label) {
 		console.log('callBackB', arguments);
@@ -50,6 +71,9 @@ function pageInit() {
 	var hashtag, iid, c, max;
 
 	if (isMobile()) document.querySelector('main').classList.add('mobile');
+
+	//init
+	init.warn = document.querySelector('.warn');
 
 	//addCallback
 	hashtag = document.querySelector('hash-tag-t');
