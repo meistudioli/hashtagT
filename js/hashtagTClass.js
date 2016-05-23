@@ -319,16 +319,7 @@ hashtagT.prototype = {
 						return this.hasAttribute('disabled');
 					},
 					set: function(flag) {
-						var ins;
-						ins = getIns(this, 'hashtagT');
-						if (flag) {
-							if (!this.hasAttribute('disabled')) this.setAttribute('disabled', 'disabled');
-							if (ins.observer) ins.Ens.inputs.removeAttribute('contenteditable');
-						} else {
-							if (this.hasAttribute('disabled')) this.removeAttribute('disabled');
-							if (ins.observer) ins.Ens.inputs.setAttribute('contenteditable', true);
-						}//end if
-						ins.genData();
+						(flag) ? this.setAttribute('disabled', 'disabled') : this.removeAttribute('disabled');
 					}
 				},
 				set: {
@@ -538,7 +529,8 @@ hashtagT.prototype = {
 			} else if (kc == 8 && !this.Ens.inputs.textContent.length && this.Data.values.length) {
 				this.remove(this.Data.values[this.Data.values.length-1]);
 			}//end if
-		} else if (isInputs && [38, 40, 13, 27].indexOf(kc) != -1) {
+		} else if (isInputs && [38, 40, 13, 27, 9].indexOf(kc) != -1) {
+			if (kc == 9) kc = 13;//tab same as enter
 			//inputs
 			switch (kc) {
 				case 27:
@@ -600,7 +592,8 @@ hashtagT.prototype = {
 		);
 	},
 	format: function(htag) {
-		return htag.replace(/^#/, '').replace(/&nbsp;/g, ' ').trim();
+		// return htag.replace(/^#/, '').replace(/&nbsp;/g, ' ').trim();
+		return htag.replace(/#/g, '').replace(/&nbsp;/g, ' ').trim();
 	},
 	prepare: function(){
 		var key, data, ins;
@@ -730,7 +723,7 @@ hashtagT.prototype = {
 				this.add(obj.t.data, true);
 				break;
 			case 'input':
-				if ([38, 40, 13, 27].indexOf(getKeyCode(e)) != -1) return;
+				if ([38, 40, 13, 27, 9].indexOf(getKeyCode(e)) != -1) return;
 				this.prepare();
 				break;
 			case 'focus':
@@ -767,7 +760,7 @@ hashtagT.prototype = {
 	validate: function(htag) {
 		var msg, pass;
 
-		htag = this.format(htag);
+		// htag = this.format(htag);
 		if (this.Ens.host.hasAttribute('disabled') || this.Ens.host.hasAttribute('readonly')) {
 			msg = 'disabled or readonly mode';
 		} else if (!htag.length) {
