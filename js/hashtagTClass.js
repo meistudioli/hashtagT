@@ -529,8 +529,7 @@ hashtagT.prototype = {
 			} else if (kc == 8 && !this.Ens.inputs.textContent.length && this.Data.values.length) {
 				this.remove(this.Data.values[this.Data.values.length-1]);
 			}//end if
-		} else if (isInputs && [38, 40, 13, 27, 9].indexOf(kc) != -1) {
-			if (kc == 9) kc = 13;//tab same as enter
+		} else if (isInputs && [38, 40, 13, 27].indexOf(kc) != -1) {
 			//inputs
 			switch (kc) {
 				case 27:
@@ -723,7 +722,7 @@ hashtagT.prototype = {
 				this.add(obj.t.data, true);
 				break;
 			case 'input':
-				if ([38, 40, 13, 27, 9].indexOf(getKeyCode(e)) != -1) return;
+				if ([38, 40, 13, 27].indexOf(getKeyCode(e)) != -1) return;
 				this.prepare();
 				break;
 			case 'focus':
@@ -731,14 +730,20 @@ hashtagT.prototype = {
 				break;
 			case 'blur':
 				this.resetPredict();
-				this.Ens.inputs.textContent = this.format(this.Ens.inputs.textContent);
+				if (this.Ens.inputs.textContent.length) {
+					this.Ens.inputs.textContent = this.format(this.Ens.inputs.textContent);
+					this.Ens.suggest.classList.add('hide');
+					this.add(this.Ens.inputs.textContent, true);
+				}//end if
 				
 				obj = this.Ens.suggest;
-				this.Data.iidBuffer = setTimeout(
-					function() {
-						obj.classList.add('hide');
-					}
-				, 200);
+				if (!obj.classList.contains('hide')) {
+					this.Data.iidBuffer = setTimeout(
+						function() {
+							obj.classList.add('hide');
+						}
+					, 200);
+				}//end if
 				break;
 			case 'transitionend':
 				if (obj.t.classList.contains('htag-unit') && !obj.t.classList.contains('on')) {
